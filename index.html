@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Decoder</title>
+</head>
+<body>
+    <h2>Text Decoder</h2>
+
+    <p>Enter the string:</p>
+    <textarea id="inputText" rows="3" cols="50"></textarea><br>
+
+    <p>Select decoder type:</p>
+    <select id="decoderType" onchange="loadDecoderScript()">
+        <option value="" disabled selected>Choose one</option>
+        <option value="Type1">Char to char</option>
+        <option value="Type2">Num to char</option>
+    </select><br>
+
+    <p1>*Note for Num to char: 300 = Space</p1>
+
+    <br>
+    <br>
+    <button onclick="processText()">Process</button><br>
+
+    <h3>Result:</h3>
+    <ul id="outputList"></ul>
+
+    <script>
+        function loadDecoderScript() {
+            const decoderType = document.getElementById('decoderType').value;
+
+            const existingScript = document.getElementById('decoderScript');
+            if (existingScript) {
+                document.head.removeChild(existingScript);
+            }
+
+            const script = document.createElement('script');
+            script.src = `${decoderType}.js`;
+            script.id = 'decoderScript';
+            document.head.appendChild(script);
+        }
+
+        function processText() {
+            if (typeof decodeText === 'function') {
+                decodeText();
+            } else {
+                console.error('decodeText function not defined in the loaded script.');
+            }
+        }
+
+        function updateOutput(result) {
+            const outputList = document.getElementById('outputList');
+            outputList.innerHTML = ""; 
+
+            for (let i = 0; i < result.length; i++) {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `Result ${i + 1}: <strong>${result[i]}</strong>`;
+                outputList.appendChild(listItem);
+            }
+        }
+    </script>
+</body>
+</html>
